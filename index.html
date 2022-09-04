@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TogetherYoutube</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+      * {
+        font-family: 'Noto Sans JP', sans-serif;
+      }
+      #room_input {
+        font-size: 80px;
+        height: 100px;
+        width: 50%;
+        border-radius: 30px;
+        border: none;
+        box-shadow: 0 15px 25px 0 rgba(0, 0, 0, .5);
+      }
+      #room_enter {
+        text-align: center;
+      }
+      #main {
+        text-align: center;
+      }
+            button {
+        appearance: none;
+  border: 0;
+  border-radius: 5px;
+  background: #4676D7;
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 16px;
+            }
+      ::placeholder {
+        font-size: 0.75em;
+   color: #aaa;
+      }
+      .msgtext {
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>TogetherYoutube</h1>
+    <div id="room_enter">
+      <p>
+      <input placeholder="部屋名(英字のみ)" id="room_input" type="text" />
+      </p>
+      <p>
+      <button onclick="enterroom();">入室</button>
+      </p>
+    </div>
+    <div id="main" style="display: none;">
+      <p id="displayname"></p>
+      <p id="youtubeid"></p>
+      <div id="player"></div>
+      <div style="display: block;">
+        <div id="msglist"></div>
+        <form id="msg_form">
+        <input id="msgbox">
+      <button onclick="msgsend();">送信</button>
+        </form>
+      </div>
+        <p>
+      <input id="ytid" />
+      <button onclick="ytidenter();">YoutubeID</button>
+      </p>
+    </div>
+<!-- script -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
