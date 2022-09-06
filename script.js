@@ -4,11 +4,12 @@ const room_input = document.getElementById("room_input")
 const displayname = document.getElementById("displayname")
 const displayid = document.getElementById("youtubeid")
 const msgbox = document.getElementById("msgbox")
-const messages = document.getElementById("msglist")
+const msglist_dom = document.getElementById("msglist")
 const msg_form = document.getElementById("msg_form")
 const ytid_input = document.getElementById("ytid")
 const main = document.getElementById("main")
 let roomname;
+let onmsglist = false;
 let oniframe = false;
 const myid = Math.random().toString(32).substring(2);
 let nowtime;
@@ -26,12 +27,23 @@ msg_form.addEventListener("submit", function(e){
 });
 msg_form.addEventListener('keypress', key_event);
 function key_event(e) {
-  console
   if (e.keyCode === 13) {
+    if(msgbox.value !== ''){
 		socket.emit("msg" , {"room" : roomname , "value" : msgbox.value})
 
     msgbox.value = "";
+    }
 	} 
+}
+
+function msglist() {
+  if(onmsglist){
+    msglist_dom.style.display = "none"
+    onmsglist = false;
+  }else{
+    msglist_dom.style.display = "block"
+    onmsglist = true;
+  }
 }
 
 function onPlayerStateChange(event) {
@@ -45,7 +57,24 @@ function onPlayerStateChange(event) {
     }
   }
 }
-
+function htmlspecialchars(unsafeText){
+  if(typeof unsafeText !== 'string'){
+    return unsafeText;
+  }
+  return unsafeText.replace(
+    /[&'`"<>]/g, 
+    function(match) {
+      return {
+        '&': '&amp;',
+        "'": '&#x27;',
+        '`': '&#x60;',
+        '"': '&quot;',
+        '<': '&lt;',
+        '>': '&gt;',
+      }[match]
+    }
+  );
+}
 function enterroom() {
   roomname = room_input.value;
   socket.emit("join", roomname);
@@ -58,17 +87,24 @@ function ytidenter() {
   socket.emit('ytid_select', { "room": roomname, "value": ytid_input.value })
 }
 function msgsend() {
+  if(msgbox.value !== ''){
   socket.emit("msg" , {"room" : roomname , "value" : msgbox.value})
+  msgbox.value = '';
+  }
 }
 socket.on("join" , (msg) => {
   createText("誰か入ってきました")
 })
 socket.on("msg" , (msg) => {
   createText(msg)
+  const list = document.querySelector("#msglist");
+    const li = document.createElement("li");
+    let safeText = htmlspecialchars(msg);
+    li.innerHTML = `${safeText}`;
+    list.insertBefore(li, list.firstChild);
 })
 socket.on("pauce", (time) => {
   if (time.id !== myid) {
-    console.log("ポーズの関数です。違うユーザーが変えましたので")
     player.seekTo(time.time)
     player.pauseVideo()
   }

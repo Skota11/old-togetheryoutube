@@ -54,7 +54,6 @@
       <p id="youtubeid"></p>
       <div id="player"></div>
       <div style="display: block;">
-        <div id="msglist"></div>
         <form id="msg_form">
         <input id="msgbox">
       <button onclick="msgsend();">送信</button>
@@ -64,6 +63,8 @@
       <input id="ytid" />
       <button onclick="ytidenter();">YoutubeID</button>
       </p>
+      <p><button onclick="msglist();">Message一覧 - 表示/隠す</button></p>
+      <div style="display:none;" id="msglist"></div>
     </div>
 <!-- script -->
     <script src="/socket.io/socket.io.js"></script>
